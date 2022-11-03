@@ -2,11 +2,11 @@
 {\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;\red109\green109\blue109;\red32\green32\blue32;\red191\green100\blue38;
 \red153\green168\blue186;\red88\green118\blue71;\red86\green132\blue173;\red152\green54\blue29;\red254\green187\blue91;
-\red117\green114\blue185;\red95\green96\blue103;}
+\red117\green114\blue185;\red41\green50\blue40;\red95\green96\blue103;}
 {\*\expandedcolortbl;;\csgenericrgb\c42745\c42745\c42745;\csgenericrgb\c12549\c12549\c12549;\csgenericrgb\c74902\c39216\c14902;
 \csgenericrgb\c60000\c65882\c72941;\csgenericrgb\c34510\c46275\c27843;\csgenericrgb\c33725\c51765\c67843;\csgenericrgb\c59608\c21176\c11373;\csgenericrgb\c99608\c73333\c35686;
-\csgenericrgb\c45882\c44706\c72549;\csgenericrgb\c37255\c37647\c40392;}
-\margl1440\margr1440\vieww19400\viewh19880\viewkind0
+\csgenericrgb\c45882\c44706\c72549;\csgenericrgb\c16078\c19608\c15686;\csgenericrgb\c37255\c37647\c40392;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
 \f0\fs26 \cf2 \cb3 #%%\
@@ -124,7 +124,7 @@ Intro numbers\
 \cf2 #%%\
 \
 # Total service line length in all of the utility\
-\cf5 totserviceutility = pd.read_sql(\cf6 "SELECT materialdesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ), \cf9 SUM\cf6 (shape_length) FROM service GROUP BY materialdesc" \cf4 , \cf5 assets)\
+\cf5 totserviceutility = pd.read_sql(\cf6 "\cb11 SELECT materialdesc, COUNT(*), SUM(shape_length) FROM service GROUP BY materialdesc\cb3 " \cf4 , \cf5 assets)\
 totserviceutility.loc[\cf7 4\cf4 , \cf5 :] = totserviceutility.sum(\cf8 axis\cf5 =\cf7 0\cf5 )\
 totserviceutility.iloc[\cf7 4\cf4 ,\cf7 0\cf5 ] = \cf6 "All"\
 \
@@ -145,11 +145,11 @@ Service line install year summary statistics\
 # Median installation year\
 \
 # Plastic service line age stats\
-\cf5 plasticsvcinstallyrStats = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Plastic'" \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
+\cf5 plasticsvcinstallyrStats = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Plastic'\cb3 " \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \cf2 # Steel service line age stats\
-\cf5 steelsvcinstallyrStats = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Steel'" \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
+\cf5 steelsvcinstallyrStats = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Steel'\cb3 " \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \cf2 # All service line age stats\
-\cf5 allsvcinstallyrStats = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) FROM service" \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
+\cf5 allsvcinstallyrStats = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service\cb3 " \cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \
 \cf2 #%%\
 \
@@ -162,13 +162,13 @@ Service line diameter statistics\
 \cf2 #%%\
 \
 # Diameter statistics for all service lines\
-\cf5 svcDiameterStats = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 svcDiameterStats = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 svcDiameterStats = addTotalsFractions(svcDiameterStats)\
 \
-plasticsvcDiameterStats = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+plasticsvcDiameterStats = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 plasticsvcDiameterStats = addTotalsFractions(plasticsvcDiameterStats)\
 \
-steelsvcDiameterStats = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+steelsvcDiameterStats = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 steelsvcDiameterStats = addTotalsFractions(steelsvcDiameterStats)\
 \
 \cf2 #%% md\
@@ -177,33 +177,33 @@ Breakdown of service type\
 \
 \cf2 #%%\
 \
-\cf5 svcTypeStats = pd.read_sql(\cf6 "SELECT servicetype, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service GROUP BY servicetype" \cf4 , \cf5 assets)\
+\cf5 svcTypeStats = pd.read_sql(\cf6 "\cb11 SELECT servicetype, COUNT(*) FROM service GROUP BY servicetype\cb3 " \cf4 , \cf5 assets)\
 svcTypeStats = addTotalsFractions(svcTypeStats)\
 svcTypeStats\
 \
 \cf2 #%%\
 \
 # Average asset length by servicetype\
-\cf5 svcAssetTypeLen = pd.read_sql(\cf6 "SELECT servicetype, \cf9 COUNT\cf6 (\cf9 *\cf6 ), \cf9 AVG\cf6 (shapelengthvalue) FROM service GROUP BY servicetype" \cf4 , \cf5 assets)\
+\cf5 svcAssetTypeLen = pd.read_sql(\cf6 "\cb11 SELECT servicetype, COUNT(*), AVG(shapelengthvalue) FROM service GROUP BY servicetype\cb3 " \cf4 , \cf5 assets)\
 svcAssetTypeLen = addTotalsFractions(svcAssetTypeLen)\
 svcAssetTypeLen\
 \
 \cf2 #%%\
 \
 # Average asset diameter by servicetype\
-\cf5 svcServiceDiam = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE servicetype='Service' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 svcServiceDiam = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service WHERE servicetype='Service' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 svcServiceDiam = addTotalsFractions(svcServiceDiam)\
 svcServiceDiam\
 \
 \cf2 #%%\
 \
-\cf5 svcBranchDiam = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE servicetype='Branch' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 svcBranchDiam = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service WHERE servicetype='Branch' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 svcBranchDiam = addTotalsFractions(svcBranchDiam)\
 svcBranchDiam\
 \
 \cf2 #%%\
 \
-\cf5 svcMotherDiam = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE servicetype='Mother' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 svcMotherDiam = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, COUNT(*) FROM service WHERE servicetype='Mother' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 svcMotherDiam = addTotalsFractions(svcMotherDiam)\
 svcMotherDiam\
 \
@@ -213,7 +213,7 @@ Precise plastic composition\
 \
 \cf2 #%%\
 \
-\cf5 plasticCompSvc = pd.read_sql(\cf6 "SELECT plastictypedesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service GROUP BY plastictypedesc"\cf4 , \cf5 assets)\
+\cf5 plasticCompSvc = pd.read_sql(\cf6 "\cb11 SELECT plastictypedesc, COUNT(*) FROM service GROUP BY plastictypedesc\cb3 "\cf4 , \cf5 assets)\
 plasticCompSvc = addTotalsFractions(plasticCompSvc)\
 plasticCompSvc[\cf6 "Fraction of plastics"\cf5 ] = plasticCompSvc[\cf6 "count"\cf5 ]/totserviceutility.loc[\cf6 "Plastic"\cf4 , \cf6 "Count"\cf5 ]\
 plasticCompSvc\
@@ -225,7 +225,7 @@ Leak count summary statistics\
 \
 \cf2 #%%\
 \
-\cf5 leakYear = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak " \cf5 + assettypecalcWhere+ \cf6 " GROUP BY \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)" \cf4 , \cf5 leaks)\
+\cf5 leakYear = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(*) FROM leak \cb3 " \cf5 + assettypecalcWhere+ \cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 " \cf4 , \cf5 leaks)\
 leakYear.describe()\
 leakYear\
 \
@@ -233,7 +233,7 @@ leakYear\
 \
 # leakCountByGrade = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak GROUP BY initialleakgrade" , leaks)\
 # leakCountByGrade = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak WHERE assettypecalc='Service Line' GROUP BY initialleakgrade" , leaks)\
-\cf5 leakCountByGrade = pd.read_sql(\cf6 "SELECT initialleakgrade, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak " \cf5 + assettypecalcWhere+ \cf6 " GROUP BY initialleakgrade" \cf4 , \cf5 leaks)\
+\cf5 leakCountByGrade = pd.read_sql(\cf6 "\cb11 SELECT initialleakgrade, COUNT(*) FROM leak \cb3 " \cf5 + assettypecalcWhere+ \cf6 "\cb11  GROUP BY initialleakgrade\cb3 " \cf4 , \cf5 leaks)\
 leakCountByGrade = addTotalsFractions(leakCountByGrade)\
 leakCountByGrade\
 \
@@ -241,7 +241,7 @@ leakCountByGrade\
 \
 # leakCountByGradePlast = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Plastic' GROUP BY initialleakgrade" , leaks)\
 # leakCountByGradePlast = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Plastic' AND assettypecalc='Service Line' GROUP BY initialleakgrade" , leaks)\
-\cf5 leakCountByGradePlast = pd.read_sql(\cf6 "SELECT initialleakgrade, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE materialcalc='Plastic'  " \cf5 + assettypecalcAnd + \cf6 " GROUP BY initialleakgrade" \cf4 , \cf5 leaks)\
+\cf5 leakCountByGradePlast = pd.read_sql(\cf6 "\cb11 SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Plastic'  \cb3 " \cf5 + assettypecalcAnd + \cf6 "\cb11  GROUP BY initialleakgrade\cb3 " \cf4 , \cf5 leaks)\
 leakCountByGradePlast = addTotalsFractions(leakCountByGradePlast)\
 leakCountByGradePlast\
 \
@@ -249,28 +249,28 @@ leakCountByGradePlast\
 \
 # leakCountByGradeSteel = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Steel' GROUP BY initialleakgrade" , leaks)\
 # leakCountByGradeSteel = pd.read_sql("SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Steel' AND assettypecalc='Service Line' GROUP BY initialleakgrade" , leaks)\
-\cf5 leakCountByGradeSteel = pd.read_sql(\cf6 "SELECT initialleakgrade, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE materialcalc='Steel' " \cf5 + assettypecalcAnd + \cf6 "  GROUP BY initialleakgrade" \cf4 , \cf5 leaks)\
+\cf5 leakCountByGradeSteel = pd.read_sql(\cf6 "\cb11 SELECT initialleakgrade, COUNT(*) FROM leak WHERE materialcalc='Steel' \cb3 " \cf5 + assettypecalcAnd + \cf6 "\cb11   GROUP BY initialleakgrade\cb3 " \cf4 , \cf5 leaks)\
 leakCountByGradeSteel = addTotalsFractions(leakCountByGradeSteel)\
 leakCountByGradeSteel\
 \
 \cf2 #%%\
 \
 # leakCountByMat = pd.read_sql("SELECT mainmaterialcontosvcdesc, COUNT(*) FROM leak GROUP BY mainmaterialcontosvcdesc" , leaks)\
-\cf5 leakCountByMat = pd.read_sql(\cf6 "SELECT materialcalc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak " \cf5 + assettypecalcWhere + \cf6 "  GROUP BY materialcalc" \cf4 , \cf5 leaks)\
+\cf5 leakCountByMat = pd.read_sql(\cf6 "\cb11 SELECT materialcalc, COUNT(*) FROM leak \cb3 " \cf5 + assettypecalcWhere + \cf6 "\cb11   GROUP BY materialcalc\cb3 " \cf4 , \cf5 leaks)\
 leakCountByMat = addTotalsFractions(leakCountByMat)\
 leakCountByMat\
 \
 \cf2 #%%\
 \
 # leakCountByMat = pd.read_sql("SELECT mainmaterialcontosvcdesc, COUNT(*) FROM leak GROUP BY mainmaterialcontosvcdesc" , leaks)\
-\cf5 leakCountByMatCon = pd.read_sql(\cf6 "SELECT mainmaterialcontosvcdesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak " \cf5 + assettypecalcWhere + \cf6 "  GROUP BY mainmaterialcontosvcdesc" \cf4 , \cf5 leaks)\
+\cf5 leakCountByMatCon = pd.read_sql(\cf6 "\cb11 SELECT mainmaterialcontosvcdesc, COUNT(*) FROM leak \cb3 " \cf5 + assettypecalcWhere + \cf6 "\cb11   GROUP BY mainmaterialcontosvcdesc\cb3 " \cf4 , \cf5 leaks)\
 leakCountByMatCon = addTotalsFractions(leakCountByMatCon)\
 leakCountByMatCon\
 \
 \cf2 #%%\
 \
 # Breakdown by asset type\
-\cf5 leakCountByAssetType = pd.read_sql(\cf6 "SELECT assettypecalc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak GROUP BY assettypecalc" \cf4 , \cf5 leaks)\
+\cf5 leakCountByAssetType = pd.read_sql(\cf6 "\cb11 SELECT assettypecalc, COUNT(*) FROM leak GROUP BY assettypecalc\cb3 " \cf4 , \cf5 leaks)\
 leakCountByAssetType\
 \
 \cf2 #%% md\
@@ -279,13 +279,13 @@ Data summaries for SI\
 \
 \cf2 #%%\
 \
-\cf5 serviceFirst100Rows = pd.read_sql(\cf6 "SELECT \cf9 *\cf6  FROM service FETCH FIRST 100 ROWS ONLY" \cf4 , \cf5 assets)\
+\cf5 serviceFirst100Rows = pd.read_sql(\cf6 "\cb11 SELECT * FROM service FETCH FIRST 100 ROWS ONLY\cb3 " \cf4 , \cf5 assets)\
 pd.options.display.max_rows = \cf7 999\
 \cf5 serviceFirst100Rows.dtypes\
 \
 \cf2 #%%\
 \
-\cf5 leakFirst100Rows = pd.read_sql(\cf6 "SELECT \cf9 *\cf6  FROM leak FETCH FIRST 100 ROWS ONLY" \cf4 , \cf5 leaks)\
+\cf5 leakFirst100Rows = pd.read_sql(\cf6 "\cb11 SELECT * FROM leak FETCH FIRST 100 ROWS ONLY\cb3 " \cf4 , \cf5 leaks)\
 pd.options.display.max_rows = \cf7 999\
 \cf5 leakFirst100Rows.dtypes\
 \
@@ -324,14 +324,14 @@ Leaks by grade and cause\
     \cf4 else\cf5 :\
         gradeString=\cf6 " AND initialleakgrade='" \cf5 + grade + \cf6 "'"\
     \cf4 if \cf5 startyear==\cf4 False\cf5 :\
-        \cf11 yearString \cf5 = \cf6 ""\
+        \cf12 yearString \cf5 = \cf6 ""\
     \cf4 elif \cf5 (grade==\cf4 False\cf5 ) & (material==\cf4 False\cf5 ) & (component==\cf4 False\cf5 ):\
-        \cf11 yearString \cf5 = \cf6 "WHERE EXTRACT(YEAR FROM reporteddatetime) >='" \cf5 + startyear + \cf6 "'"\
-    \cf4 else\cf5 : \cf11 yearString \cf5 = \cf6 " AND EXTRACT(YEAR FROM reporteddatetime) >='" \cf5 + startyear + \cf6 "'"\
+        \cf12 yearString \cf5 = \cf6 "WHERE EXTRACT(YEAR FROM reporteddatetime) >='" \cf5 + startyear + \cf6 "'"\
+    \cf4 else\cf5 : \cf12 yearString \cf5 = \cf6 " AND EXTRACT(YEAR FROM reporteddatetime) >='" \cf5 + startyear + \cf6 "'"\
     \cf5 FullWhereString = whereString + materialString + componentString + gradeString \cf2 # + yearString\
     # return(grade)\
     # return("SELECT leakcausedesc, COUNT(leakcausedesc) FROM leak" + FullWhereString + " GROUP BY leakcausedesc")\
-    \cf5 querieddf = pd.read_sql(\cf6 "SELECT leakcausedesc, \cf9 COUNT\cf6 (leakcausedesc) FROM leak" \cf5 + FullWhereString + \cf6 " GROUP BY leakcausedesc"\cf4 , \cf5 leaks)\
+    \cf5 querieddf = pd.read_sql(\cf6 "\cb11 SELECT leakcausedesc, COUNT(leakcausedesc) FROM leak\cb3 " \cf5 + FullWhereString + \cf6 "\cb11  GROUP BY leakcausedesc\cb3 "\cf4 , \cf5 leaks)\
     \cf4 if \cf5 addtotals==\cf4 True\cf5 :\
         \cf4 return\cf5 (addTotalsFractions(querieddf))\
     \cf4 else\cf5 : \cf4 return\cf5 (querieddf)\
@@ -374,10 +374,10 @@ Leaks by grade and cause\
     \cf5 FullWhereString = whereString + materialString + componentString + gradeString + yearString\
     \cf2 # return(grade)\
     # return("SELECT leakcausedesc, COUNT(leakcausedesc) FROM leak" + FullWhereString + " GROUP BY leakcausedesc")\
-    \cf5 querieddf = pd.read_sql(\cf6 "SELECT assettypecalc, \cf9 COUNT\cf6 (assettypecalc) FROM leak" \cf5 + FullWhereString + \cf6 " GROUP BY assettypecalc"\cf4 , \cf5 leaks)\
+    \cf5 querieddf = pd.read_sql(\cf6 "\cb11 SELECT assettypecalc, COUNT(assettypecalc) FROM leak\cb3 " \cf5 + FullWhereString + \cf6 "\cb11  GROUP BY assettypecalc\cb3 "\cf4 , \cf5 leaks)\
     \cf4 if \cf5 addtotals==\cf4 True\cf5 :\
         \cf4 return\cf5 (addTotalsFractions(querieddf))\
-    \cf4 else\cf5 : \cf4 return\cf5 (\cf6 "SELECT assettypecalc, \cf9 COUNT\cf6 (assettypecalc) FROM leak" \cf5 + FullWhereString + \cf6 " GROUP BY assettypecalc"\cf5 )\
+    \cf4 else\cf5 : \cf4 return\cf5 (\cf6 "\cb11 SELECT assettypecalc, COUNT(assettypecalc) FROM leak\cb3 " \cf5 + FullWhereString + \cf6 "\cb11  GROUP BY assettypecalc\cb3 "\cf5 )\
     \cf2 # else: return(querieddf)\
 \
 \
@@ -739,7 +739,7 @@ Leak summary statistics from 2009 on\
 \
 #%%\
 \
-\cf5 leakcausedescSince2009 = pd.read_sql(\cf6 "SELECT leakcausedesc, \cf9 COUNT\cf6 (leakcausedesc) FROM leak WHERE \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 + startyear + \cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY leakcausedesc"\cf4 , \cf5 leaks)\
+\cf5 leakcausedescSince2009 = pd.read_sql(\cf6 "\cb11 SELECT leakcausedesc, COUNT(leakcausedesc) FROM leak WHERE EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 + startyear + \cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY leakcausedesc\cb3 "\cf4 , \cf5 leaks)\
 leakcausedescSince2009 = addTotalsFractions(leakcausedescSince2009)\
 leakcausedescSince2009\
 \
@@ -754,7 +754,7 @@ leakcausedescSince2009\
 \
 #%%\
 \
-\cf5 leakcausedescSince2009Gr1 = pd.read_sql(\cf6 "SELECT leakcausedesc, \cf9 COUNT\cf6 (leakcausedesc) FROM leak WHERE \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 + startyear +\cf6 "'" \cf5 + assettypecalcAnd + \cf6 " AND initialleakgrade='1' GROUP BY leakcausedesc"\cf4 , \cf5 leaks)\
+\cf5 leakcausedescSince2009Gr1 = pd.read_sql(\cf6 "\cb11 SELECT leakcausedesc, COUNT(leakcausedesc) FROM leak WHERE EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 + startyear +\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd + \cf6 "\cb11  AND initialleakgrade='1' GROUP BY leakcausedesc\cb3 "\cf4 , \cf5 leaks)\
 leakcausedescSince2009Gr1 = addTotalsFractions(leakcausedescSince2009Gr1)\
 leakcausedescSince2009Gr1\
 \
@@ -764,7 +764,7 @@ Figure 1a, Excavation leak count by year\
 \
 \cf2 #%%\
 \
-\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + assettypecalcWhere + \cf6 " GROUP BY EXTRACT(YEAR FROM reporteddatetime)"\
+\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcWhere + \cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\
 \
 \cf2 #%%\
 \
@@ -772,14 +772,14 @@ Figure 1a, Excavation leak count by year\
 \cf5 excavationFigStartYr = \cf6 '2000'\
 \cf5 excavationFigEndYr = \cf6 '2018'\
 \cf2 # Includes only excavation leaks from service line assets\
-\cf5 leakyearcountexcavationSvc = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + assettypecalcAnd + \cf6 " GROUP BY EXTRACT(YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
-leakyearcountexcavationPlastSvc = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Plastic' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + \cf6 " AND assettypecalc='Service Line' " \cf5 +\cf6 " GROUP BY \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
-leakyearcountexcavationSteelSvc = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Steel' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + \cf6 " AND assettypecalc='Service Line' " \cf5 +\cf6 " GROUP BY \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
+\cf5 leakyearcountexcavationSvc = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd + \cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
+leakyearcountexcavationPlastSvc = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Plastic' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + \cf6 "\cb11  AND assettypecalc='Service Line' \cb3 " \cf5 +\cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
+leakyearcountexcavationSteelSvc = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Steel' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + \cf6 "\cb11  AND assettypecalc='Service Line' \cb3 " \cf5 +\cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
 \
 \cf2 # Includes excavation leaks from non-service line assets\
-\cf5 leakyearcountexcavation = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr + \cf6 "' GROUP BY \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
-leakyearcountexcavationPlast = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Plastic' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY EXTRACT(YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
-leakyearcountexcavationSteel = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime), \cf9 COUNT\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Steel' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +excavationFigStartYr+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) <= '"\cf5 +excavationFigEndYr+\cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY EXTRACT(YEAR FROM reporteddatetime)"\cf4 , \cf5 leaks)\
+\cf5 leakyearcountexcavation = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr + \cf6 "\cb11 ' GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
+leakyearcountexcavationPlast = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Plastic' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
+leakyearcountexcavationSteel = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM reporteddatetime), COUNT(EXTRACT(YEAR FROM reporteddatetime)) FROM leak WHERE materialcalc='Steel' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +excavationFigStartYr+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) <= '\cb3 "\cf5 +excavationFigEndYr+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY EXTRACT(YEAR FROM reporteddatetime)\cb3 "\cf4 , \cf5 leaks)\
 \cf2 # leakyearcountexcavation\
 # leakyearcountexcavationPlast\
 # leakyearcountexcavationSteel\
@@ -825,10 +825,10 @@ ax.annotate(\cf6 ''\cf4 , \cf8 xy\cf5 =(\cf7 0.7\cf4 , \cf7 0.55\cf5 )\cf4 , \cf
             \cf8 arrowprops\cf5 =\cf10 dict\cf5 (\cf8 arrowstyle\cf5 =\cf6 '-[, widthB=4.0, lengthB=1'\cf4 , \cf8 lw\cf5 =\cf7 2.0\cf5 ))\
 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 0.4\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
-\cf2 # plt.show()\
-\cf5 plt.savefig(\cf6 'Excavation leaks over time 20220816.png'\cf5 )\
+plt.show()\
+\cf2 # plt.savefig('Excavation leaks over time 20220816.png')\
 \
-\cf2 #%% md\
+#%% md\
 \cf5 \
 Figure 1b, Installation year comparison\
 \
@@ -836,23 +836,23 @@ Figure 1b, Installation year comparison\
 \
 # Median age of plastic pipes broken by digins?\
 # plasticdiginpipeage = pd.read_sql("SELECT yearinstall FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'", leaks)\
-\cf5 plasticdiginpipeage = pd.read_sql(\cf6 "SELECT yearinstall FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND yearinstall >= '1850' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
+\cf5 plasticdiginpipeage = pd.read_sql(\cf6 "\cb11 SELECT yearinstall FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND yearinstall >= '1850' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
 plasticdiginpipeageStats = plasticdiginpipeage.astype(\cf10 int\cf5 ).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \
 \cf2 # Median age of steel pipes broken by digins?\
 # steeldiginpipeage = pd.read_sql("SELECT yearinstall FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Steel' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'", leaks)\
-\cf5 steeldiginpipeage = pd.read_sql(\cf6 "SELECT yearinstall FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Steel' AND yearinstall >= '1850'  AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
+\cf5 steeldiginpipeage = pd.read_sql(\cf6 "\cb11 SELECT yearinstall FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Steel' AND yearinstall >= '1850'  AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
 steeldiginpipeageStats = steeldiginpipeage.astype(\cf10 int\cf5 ).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \cf2 # steeldiginpipeageStats\
 \
 # Plastic service line age stats\
 # plasticsvcinstallyrStats = pd.read_sql("SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Plastic'" , assets).describe(percentiles=slctpercentiles)\
-\cf5 plasticsvcinstallyrStats = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) >= '1850' "\cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
+\cf5 plasticsvcinstallyrStats = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Plastic' AND EXTRACT(YEAR FROM installedcompletiondate) >= '1850' \cb3 "\cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \cf2 # plasticsvcinstallyrStats\
 \
 # Steel service line age stats\
 # steelsvcinstallyrStats = pd.read_sql("SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Steel'" , assets).describe(percentiles=slctpercentiles)\
-\cf5 steelsvcinstallyrStats = pd.read_sql(\cf6 "SELECT \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Steel' AND \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) >= '1850' "\cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
+\cf5 steelsvcinstallyrStats = pd.read_sql(\cf6 "\cb11 SELECT EXTRACT(YEAR FROM installedcompletiondate) FROM service WHERE materialdesc='Steel' AND EXTRACT(YEAR FROM installedcompletiondate) >= '1850' \cb3 "\cf4 , \cf5 assets).describe(\cf8 percentiles\cf5 =slctpercentiles)\
 \cf2 # steelsvcinstallyrStats\
 \
 \cf5 MedInstallAges = pd.DataFrame(\{\cf6 'DiginPlast'\cf5 :plasticdiginpipeageStats[\cf6 'yearinstall'\cf5 ]\cf4 ,\cf5 \\\
@@ -864,28 +864,13 @@ MedInstallAges\
 \cf2 #%%\
 \
 # Total asset/leak counts for each category after the analysis start year\
-\cf5 total_asset_count_after_startdate = pd.DataFrame(\{\cf6 'DiginPlast'\cf5 :pd.read_sql(\cf6 "SELECT \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
-                                                  \cf6 'AreaPlast'\cf5 :pd.read_sql(\cf6 "SELECT \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic'"\cf4 , \cf5 assets).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
-                                                  \cf6 'DiginSteel'\cf5 :pd.read_sql(\cf6 "SELECT \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Steel' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
-                                                  \cf6 'AreaSteel'\cf5 :pd.read_sql(\cf6 "SELECT \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel'"\cf4 , \cf5 assets).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\}\cf4 , \cf8 index\cf5 =[\cf7 0\cf5 ])\
+\cf5 total_asset_count_after_startdate = pd.DataFrame(\{\cf6 'DiginPlast'\cf5 :pd.read_sql(\cf6 "\cb11 SELECT COUNT(*) FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd\cf4 , \cf5 leaks).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
+                                                  \cf6 'AreaPlast'\cf5 :pd.read_sql(\cf6 "\cb11 SELECT COUNT(*) FROM service WHERE materialdesc='Plastic'\cb3 "\cf4 , \cf5 assets).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
+                                                  \cf6 'DiginSteel'\cf5 :pd.read_sql(\cf6 "\cb11 SELECT COUNT(*) FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Steel' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd\cf4 , \cf5 leaks).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\cf4 ,\cf5 \\\
+                                                  \cf6 'AreaSteel'\cf5 :pd.read_sql(\cf6 "\cb11 SELECT COUNT(*) FROM service WHERE materialdesc='Steel'\cb3 "\cf4 , \cf5 assets).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\}\cf4 , \cf8 index\cf5 =[\cf7 0\cf5 ])\
 (total_asset_count_after_startdate.iloc[\cf7 0\cf4 ,\cf5 :] - MedInstallAges.loc[[\cf6 'count'\cf5 ]].iloc[:\cf4 , \cf7 0\cf5 :\cf7 4\cf5 ])/total_asset_count_after_startdate.iloc[\cf7 0\cf4 ,\cf5 :]\
-\cf2 # (total_asset_count - np.array(MedInstallAges.loc[['count']].iloc[:, 0:4]))/total_asset_count\
-# total_asset_count_after_startdate\
-#%%\
-\cf5 pd.read_sql(\cf6 "SELECT \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic'  AND yearinstall >= '1850' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks).iloc[\cf7 0\cf4 ,\cf7 0\cf5 ]\
-\cf2 # all_excavation_install_years_plastic = pd.to_numeric(pd.read_sql("SELECT * FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic'  AND yearinstall >= '1850' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'" + assettypecalcAnd, leaks)['yearinstall'])\
-# pd.read_sql("SELECT yearinstall FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic' AND yearinstall >= '1850' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'" + assettypecalcAnd, leaks)\
-# all_excavation_install_years_plastic = pd.to_numeric(pd.read_sql("SELECT * FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic' " + assettypecalcAnd, leaks)['yearinstall'])\
-# all_excavation_install_years_plastic.describe(),\
-#%%\
-\cf5 (all_excavation_install_years_plastic>\cf7 1850\cf5 ).sum()\
-\cf2 # # Fraction with missing age\
-# ax.text(0.04, 1.01, str(round(totserviceutility.loc["Plastic","Count"]/1000000,2)) + 'M', fontsize=15, horizontalalignment="center", color="black")\
-# ax.text(1.04, 1.01, str(round(leakCountByMat2009.loc["Plastic", "count"]/1000,2)) + 'k', fontsize=15, horizontalalignment="center", color="black")\
-# ax.text(2.04, 1.01, str(round(totserviceutility.loc["Steel","Count"]/1000000,2)) + 'M', fontsize=15, horizontalalignment="center", color="black")\
-# ax.text(3.04, 1.01, str(round(leakCountByMat2009.loc["Steel", "count"]/1000,2)) + 'k', fontsize=15, horizontalalignment="center", color="black")\
 \
-#%%\
+\cf2 #%%\
 \
 # Age percentiles only\
 \
@@ -930,10 +915,10 @@ plt.yticks(\cf8 fontsize\cf5 =\cf7 14\cf5 )\
 ax.set_xlim(\cf7 1920\cf4 , \cf7 2020\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 0.4\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
-plt.savefig(\cf6 'Leak line installyr svcOnly CDF 20221018.png'\cf5 )\
-\cf2 # plt.show()\
+\cf2 # plt.savefig('Leak line installyr svcOnly CDF 20221018.png')\
+\cf5 plt.show()\
 \
-#%%\
+\cf2 #%%\
 \
 # Total digins for plastic service lines\
 # numPlasticDigins = pd.read_sql("SELECT COUNT(*) FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'" + assettypecalcAnd, leaks)\
@@ -948,13 +933,16 @@ numPlasticDigins\cf4 , \cf5 numSteelDigins\
 \
 # Compute bootstrapped uncertainty bounds on median installation year of installed assets\
 # Boostraps samples of size numDigins for the selected age distribution (controlled by the column position of installAgePctilesOnly)\
+\
 # For plastics\
 # numDigins = numPlasticDigins\
 \
 # For steels\
 \cf5 numDigins = numSteelDigins\
 \
-bootstrapSample = np.zeros([numDigins\cf4 , \cf7 1000\cf5 ])\
+\cf2 # Set col position for installAgePctilesOnly to appropriate column (0 for plastic digins, 1, for plastic assets, 2 for steel digins, 3 for steel asset)\
+\
+\cf5 bootstrapSample = np.zeros([numDigins\cf4 , \cf7 1000\cf5 ])\
 \
 \cf4 for \cf5 ii \cf4 in \cf5 np.arange(\cf7 0\cf4 , \cf7 1000\cf5 ):\
     \cf4 for \cf5 jj \cf4 in \cf5 np.arange(\cf7 0\cf4 , \cf5 numDigins):\
@@ -1033,8 +1021,8 @@ Figure 1c, excavation spatial distribution in selected region\
 \cf5 tenthLongLength = \cf7 8.851 \cf2 # km, measured from bottom left corner\
 \cf5 LongLength = tenthLongLength*\cf7 10  \cf2 # km, measured from bottom left corner\
 \
-\cf5 diginLatlongPlastic = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>="\cf5 +bottomLat+\cf6 " AND mappinglatitude<="\cf5 +topLat+\cf6 " AND mappinglongitude>="\cf5 +leftLong+\cf6 " AND mappinglongitude<="\cf5 +rightLong+\cf6 " AND materialcalc='Plastic'" \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
-diginLatlongSteel = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>="\cf5 +bottomLat+\cf6 " AND mappinglatitude<="\cf5 +topLat+\cf6 " AND mappinglongitude>="\cf5 +leftLong+\cf6 " AND mappinglongitude<="\cf5 +rightLong+\cf6 " AND materialcalc='Steel'" \cf5 + assettypecalcAnd \cf4 , \cf5 leaks)\
+\cf5 diginLatlongPlastic = pd.read_sql(\cf6 "\cb11 SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>=\cb3 "\cf5 +bottomLat+\cf6 "\cb11  AND mappinglatitude<=\cb3 "\cf5 +topLat+\cf6 "\cb11  AND mappinglongitude>=\cb3 "\cf5 +leftLong+\cf6 "\cb11  AND mappinglongitude<=\cb3 "\cf5 +rightLong+\cf6 "\cb11  AND materialcalc='Plastic'\cb3 " \cf5 + assettypecalcAnd\cf4 , \cf5 leaks)\
+diginLatlongSteel = pd.read_sql(\cf6 "\cb11 SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>=\cb3 "\cf5 +bottomLat+\cf6 "\cb11  AND mappinglatitude<=\cb3 "\cf5 +topLat+\cf6 "\cb11  AND mappinglongitude>=\cb3 "\cf5 +leftLong+\cf6 "\cb11  AND mappinglongitude<=\cb3 "\cf5 +rightLong+\cf6 "\cb11  AND materialcalc='Steel'\cb3 " \cf5 + assettypecalcAnd \cf4 , \cf5 leaks)\
 \cf2 # diginLatlongPlastic = pd.read_sql("SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>=37.255108 AND mappinglatitude<=37.408532 AND mappinglongitude>=-122.024329 AND mappinglongitude<=-121.861599 AND materialcalc='Plastic'" , leaks)\
 # diginLatlongSteel = pd.read_sql("SELECT materialcalc, mappinglatitude, mappinglongitude FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>=37.255108 AND mappinglatitude<=37.408532 AND mappinglongitude>=-122.024329 AND mappinglongitude<=-121.861599 AND materialcalc='Steel'" , leaks)\
 \cf5 diginLatlongPlastic\
@@ -1054,25 +1042,25 @@ plt.tight_layout(\cf8 pad\cf5 =\cf7 0.6\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf
 \
 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
 \
-plt.savefig(\cf6 'Spatial leak dist 20211110.png'\cf5 )\
-\cf2 # plt.show()\
+\cf2 # plt.savefig('Spatial leak dist 20211110.png')\
+\cf5 plt.show()\
 \
-#%% md\
+\cf2 #%% md\
 \cf5 \
 Figure 1d, Pressure rating\
 \
 \cf2 #%%\
 \
 # svcpressureAll = pd.read_sql("SELECT pressureclassification, COUNT(*) FROM service WHERE (pressureclassification='LP') OR (pressureclassification='HP') OR (pressureclassification='SHP') GROUP BY pressureclassification" , assets)\
-\cf5 svcpressureAll = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 svcpressureAll = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, COUNT(*) FROM service GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 svcpressureAll = addTotalsFractions(svcpressureAll)\
 \
 \cf2 # svcpressurePlastic = pd.read_sql("SELECT pressureclassification, COUNT(*) FROM service WHERE materialdesc='Plastic' AND ((pressureclassification='LP') OR (pressureclassification='HP') OR (pressureclassification='SHP')) GROUP BY pressureclassification" , assets)\
-\cf5 svcpressurePlastic = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 svcpressurePlastic = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, COUNT(*) FROM service WHERE materialdesc='Plastic' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 svcpressurePlastic = addTotalsFractions(svcpressurePlastic)\
 \
 \cf2 # svcpressureSteel = pd.read_sql("SELECT pressureclassification, COUNT(*) FROM service WHERE materialdesc='Steel' AND ((pressureclassification='LP') OR (pressureclassification='HP') OR (pressureclassification='SHP')) GROUP BY pressureclassification" , assets)\
-\cf5 svcpressureSteel = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 svcpressureSteel = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, COUNT(*) FROM service WHERE materialdesc='Steel' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 svcpressureSteel = addTotalsFractions(svcpressureSteel)\
 \
 svcpressureAll[\cf6 "Plastic"\cf5 ] = svcpressurePlastic[\cf6 "count"\cf5 ]\
@@ -1082,15 +1070,15 @@ svcpressureAll[\cf6 "Steel Frac"\cf5 ] = svcpressureSteel[\cf6 "Fraction"\cf5 ]\
 svcpressureAll.rename(\cf8 columns\cf5 =\{\cf6 'pressureclassification'\cf5 : \cf6 'Pressure'\cf4 , \cf6 'count'\cf5 : \cf6 'All'\cf5 \}\cf4 , \cf8 inplace\cf5 =\cf4 True\cf5 )\
 \
 \cf2 # diginpipepressurePlast = pd.read_sql("SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"' GROUP BY systempressure", leaks)\
-\cf5 diginpipepressurePlast = pd.read_sql(\cf6 "SELECT systempressure, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY systempressure"\cf4 , \cf5 leaks)\
+\cf5 diginpipepressurePlast = pd.read_sql(\cf6 "\cb11 SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY systempressure\cb3 "\cf4 , \cf5 leaks)\
 diginpipepressurePlast = addTotalsFractions(diginpipepressurePlast)\
 \
 \cf2 # diginpipepressureSteel = pd.read_sql("SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='"+leaktype+"' AND materialcalc='Steel' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"' GROUP BY systempressure", leaks)\
-\cf5 diginpipepressureSteel = pd.read_sql(\cf6 "SELECT systempressure, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Steel' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY systempressure"\cf4 , \cf5 leaks)\
+\cf5 diginpipepressureSteel = pd.read_sql(\cf6 "\cb11 SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Steel' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY systempressure\cb3 "\cf4 , \cf5 leaks)\
 diginpipepressureSteel = addTotalsFractions(diginpipepressureSteel)\
 \
 \cf2 # diginpipepressureAll = pd.read_sql("SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='"+leaktype+"' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"' GROUP BY systempressure", leaks)\
-\cf5 diginpipepressureAll = pd.read_sql(\cf6 "SELECT systempressure, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd +\cf6 " GROUP BY systempressure"\cf4 , \cf5 leaks)\
+\cf5 diginpipepressureAll = pd.read_sql(\cf6 "\cb11 SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd +\cf6 "\cb11  GROUP BY systempressure\cb3 "\cf4 , \cf5 leaks)\
 diginpipepressureAll = addTotalsFractions(diginpipepressureAll)\
 \
 \cf2 # Create data frame for pressure breakdown comparison by material\
@@ -1123,7 +1111,7 @@ pressureComparisonTr\
 \
 # Leak count by material from 2009 on\
 # leakCountByMat = pd.read_sql("SELECT mainmaterialcontosvcdesc, COUNT(*) FROM leak GROUP BY mainmaterialcontosvcdesc" , leaks)\
-\cf5 leakCountByMat2009 = pd.read_sql(\cf6 "SELECT materialcalc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak " \cf5 + assettypecalcWhere +\cf6 " AND EXTRACT(YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'"\cf5 + \cf6 "  GROUP BY materialcalc" \cf4 , \cf5 leaks)\
+\cf5 leakCountByMat2009 = pd.read_sql(\cf6 "\cb11 SELECT materialcalc, COUNT(*) FROM leak \cb3 " \cf5 + assettypecalcWhere +\cf6 "\cb11  AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 "\cf5 + \cf6 "\cb11   GROUP BY materialcalc\cb3 " \cf4 , \cf5 leaks)\
 leakCountByMat2009 = addTotalsFractions(leakCountByMat2009)\
 leakCountByMat2009\
 \
@@ -1167,17 +1155,17 @@ ax.set(\cf8 xlabel\cf5 =\cf4 None\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 1\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 ) \cf2 # 0.4\
 \cf5 plt.rcParams.update(\{\cf6 'hatch.color'\cf5 : \cf6 '#C0C0C0'\cf5 \}) \cf2 # light grey '#929591' 'C0C0C0'\
 \cf5 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
-\cf2 # plt.show()\
-\cf5 plt.savefig(\cf6 'Pressure share pop excavation 20221018.png'\cf5 )\
+plt.show()\
+\cf2 # plt.savefig('Pressure share pop excavation 20221018.png')\
 \
-\cf2 #%%\
+#%%\
 \
 # What is happening with pressure rating other?\
 # PressureGroupsCounts = pd.read_sql("SELECT systempressure, COUNT(*)  FROM leak WHERE subthreatcalc='"+leaktype+"' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'" + assettypecalcAnd + "GROUP BY systempressure", leaks)\
 # PressureGroupsCounts\
 # diginpipepressureAllTP = pd.read_sql("SELECT locationremarks, initiallocationdesc, lineusecalc, assettypecalc, assetgroupcalc, subthreatcalc  FROM leak WHERE subthreatcalc='"+leaktype+"' AND EXTRACT(YEAR FROM reporteddatetime) >= '"+startyear+"'" + assettypecalcAnd + "AND systempressure='TP'", leaks)\
 # diginpipepressureAllTP\
-\cf5 diginpipepressureAllNone = pd.read_sql(\cf6 "SELECT locationremarks, initiallocationdesc, lineusecalc, assettypecalc, assetgroupcalc, subthreatcalc  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 + assettypecalcAnd + \cf6 "AND systempressure='NULL'"\cf4 , \cf5 leaks)\
+\cf5 diginpipepressureAllNone = pd.read_sql(\cf6 "\cb11 SELECT locationremarks, initiallocationdesc, lineusecalc, assettypecalc, assetgroupcalc, subthreatcalc  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 + assettypecalcAnd + \cf6 "\cb11 AND systempressure='NULL'\cb3 "\cf4 , \cf5 leaks)\
 diginpipepressureAllNone\
 \
 \cf2 # diginpipepressureAll = addTotalsFractions(diginpipepressureAll)\
@@ -1201,10 +1189,10 @@ ax.set_ylabel(\cf6 'South-North distance [km]'\cf4 , \cf8 fontsize\cf5 =\cf7 18\
 plt.xticks(\cf8 fontsize\cf5 =\cf7 14\cf5 )\
 plt.yticks(\cf8 fontsize\cf5 =\cf7 14\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 0.4\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
-\cf2 # plt.show()\
-\cf5 plt.savefig(\cf6 'Pressure share by material 20220607.png'\cf5 )\
+plt.show()\
+\cf2 # plt.savefig('Pressure share by material 20220607.png')\
 \
-\cf2 #%%\
+#%%\
 \
 \cf5 svcpressureAll.iloc[\cf7 0\cf4 ,\cf5 [\cf7 2\cf4 ,\cf7 4\cf4 ,\cf7 6\cf5 ]]\
 \
@@ -1216,13 +1204,13 @@ Pipeline diameter comparison\
 \
 # Compute pipeline diameters for plastic and steel service lines\
 \
-\cf5 linesizeExcavSteel = pd.read_sql(\cf6 "SELECT linesize, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Steel' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'" \cf5 +  assettypecalcAnd + \cf6 "  GROUP BY linesize"\cf4 , \cf5 leaks)\
+\cf5 linesizeExcavSteel = pd.read_sql(\cf6 "\cb11 SELECT linesize, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Steel' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 " \cf5 +  assettypecalcAnd + \cf6 "\cb11   GROUP BY linesize\cb3 "\cf4 , \cf5 leaks)\
 linesizeExcavSteel = addTotalsFractions(linesizeExcavSteel)\
 \
-linesizeExcavPlast = pd.read_sql(\cf6 "SELECT linesize, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY linesize"\cf4 , \cf5 leaks)\
+linesizeExcavPlast = pd.read_sql(\cf6 "\cb11 SELECT linesize, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY linesize\cb3 "\cf4 , \cf5 leaks)\
 linesizeExcavPlast = addTotalsFractions(linesizeExcavPlast)\
 \
-linesizeExcavAll = pd.read_sql(\cf6 "SELECT linesize, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE subthreatcalc='"\cf5 +leaktype+\cf6 "' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+ \cf6 "'" \cf5 +  assettypecalcAnd + \cf6 " GROUP BY linesize"\cf4 , \cf5 leaks)\
+linesizeExcavAll = pd.read_sql(\cf6 "\cb11 SELECT linesize, COUNT(*)  FROM leak WHERE subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+ \cf6 "\cb11 '\cb3 " \cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY linesize\cb3 "\cf4 , \cf5 leaks)\
 linesizeExcavAll = addTotalsFractions(linesizeExcavAll)\
 \
 \cf2 #%%\
@@ -1265,10 +1253,10 @@ plt.yticks(\cf8 fontsize\cf5 =\cf7 14\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 0.4\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
 \
-\cf2 # plt.show()\
-\cf5 plt.savefig(\cf6 'Plast diam excav comparison 20211110.png'\cf5 )\
+plt.show()\
+\cf2 # plt.savefig('Plast diam excav comparison 20211110.png')\
 \
-\cf2 #%%\
+#%%\
 \
 # Create dataset for side-by-side plastic bar chart\
 \
@@ -1293,10 +1281,10 @@ plt.yticks(\cf8 fontsize\cf5 =\cf7 14\cf5 )\
 plt.tight_layout(\cf8 pad\cf5 =\cf7 0.4\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
 plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 6\cf4 ,\cf7 4\cf5 )\
 \
-\cf2 # plt.show()\
-\cf5 plt.savefig(\cf6 'Steel diam excav comparison 20211110.png'\cf5 )\
+plt.show()\
+\cf2 # plt.savefig('Steel diam excav comparison 20211110.png')\
 \
-\cf2 #%%\
+#%%\
 \
 \cf5 linesizeExcavAll.iloc[np.arange(\cf10 len\cf5 (linesizeExcavAll.index)-\cf7 1\cf5 )\cf4 , \cf5 [\cf7 0\cf4 ,\cf7 2\cf5 ]].unstack()\
 \
@@ -1320,24 +1308,24 @@ Figure 3: Learning plastic composition for service lines\
 \
 #%%\
 \
-\cf5 plasticCompSvcHalfIn = pd.read_sql(\cf6 "SELECT plastictypedesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE nominaldiameter='0.5' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc"\cf4 , \cf5 assets)\
+\cf5 plasticCompSvcHalfIn = pd.read_sql(\cf6 "\cb11 SELECT plastictypedesc, COUNT(*) FROM service WHERE nominaldiameter='0.5' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc\cb3 "\cf4 , \cf5 assets)\
 plasticCompSvcHalfIn = addTotalsFractions(plasticCompSvcHalfIn)\
 \
-plasticCompSvcOneIn = pd.read_sql(\cf6 "SELECT plastictypedesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE nominaldiameter='1' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc"\cf4 , \cf5 assets)\
+plasticCompSvcOneIn = pd.read_sql(\cf6 "\cb11 SELECT plastictypedesc, COUNT(*) FROM service WHERE nominaldiameter='1' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc\cb3 "\cf4 , \cf5 assets)\
 plasticCompSvcOneIn = addTotalsFractions(plasticCompSvcOneIn)\
 \
-plasticCompSvcTwoIn = pd.read_sql(\cf6 "SELECT plastictypedesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM service WHERE nominaldiameter='2' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc"\cf4 , \cf5 assets)\
+plasticCompSvcTwoIn = pd.read_sql(\cf6 "\cb11 SELECT plastictypedesc, COUNT(*) FROM service WHERE nominaldiameter='2' AND (NOT plastictypedesc='Not Applicable') GROUP BY plastictypedesc\cb3 "\cf4 , \cf5 assets)\
 plasticCompSvcTwoIn = addTotalsFractions(plasticCompSvcTwoIn)\
 \
 \cf2 #%%\
 \
-\cf5 plasticdiginmaterialHalfIn = pd.read_sql(\cf6 "SELECT linematerialdesc, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE linesize='0.5' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY linematerialdesc"\cf4 , \cf5 leaks)\
+\cf5 plasticdiginmaterialHalfIn = pd.read_sql(\cf6 "\cb11 SELECT linematerialdesc, COUNT(*)  FROM leak WHERE linesize='0.5' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY linematerialdesc\cb3 "\cf4 , \cf5 leaks)\
 plasticdiginmaterialHalfIn = addTotalsFractions(plasticdiginmaterialHalfIn)\
 \
-plasticdiginmaterialOneIn = pd.read_sql(\cf6 "SELECT linematerialdesc, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE linesize='1' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY linematerialdesc"\cf4 , \cf5 leaks)\
+plasticdiginmaterialOneIn = pd.read_sql(\cf6 "\cb11 SELECT linematerialdesc, COUNT(*)  FROM leak WHERE linesize='1' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY linematerialdesc\cb3 "\cf4 , \cf5 leaks)\
 plasticdiginmaterialOneIn = addTotalsFractions(plasticdiginmaterialOneIn)\
 \
-plasticdiginmaterialTwoIn = pd.read_sql(\cf6 "SELECT linematerialdesc, \cf9 COUNT\cf6 (\cf9 *\cf6 )  FROM leak WHERE linesize='2' AND subthreatcalc='"\cf5 +leaktype+\cf6 "' AND materialcalc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= '"\cf5 +startyear+\cf6 "'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY linematerialdesc"\cf4 , \cf5 leaks)\
+plasticdiginmaterialTwoIn = pd.read_sql(\cf6 "\cb11 SELECT linematerialdesc, COUNT(*)  FROM leak WHERE linesize='2' AND subthreatcalc='\cb3 "\cf5 +leaktype+\cf6 "\cb11 ' AND materialcalc='Plastic' AND EXTRACT(YEAR FROM reporteddatetime) >= '\cb3 "\cf5 +startyear+\cf6 "\cb11 '\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY linematerialdesc\cb3 "\cf4 , \cf5 leaks)\
 plasticdiginmaterialTwoIn = addTotalsFractions(plasticdiginmaterialTwoIn)\
 \
 \cf2 # Material breakdown of plastic service lines affected by excavation damage\
@@ -1425,19 +1413,19 @@ plt.rcParams[\cf6 "figure.figsize"\cf5 ] = (\cf7 10\cf4 ,\cf7 5\cf5 )\
 \cf2 # plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)\
 \cf5 plt.tight_layout(\cf8 pad\cf5 =\cf7 1.2\cf4 , \cf8 w_pad\cf5 =\cf7 0.5\cf4 , \cf8 h_pad\cf5 =\cf7 1.0\cf5 )\
 \cf2 # plt.xticks(rotation=30, ha='right')\
-# plt.show()\
 \
-\cf5 plt.savefig(\cf6 'Plast comp excav comparison svc 20211116.png'\cf5 )\
+\cf5 plt.show()\
+\cf2 # plt.savefig('Plast comp excav comparison svc 20211116.png')\
 \
 \
-\cf2 #%% md\
+#%% md\
 \cf5 \
 SI, breakdown of plastic service leaks and service lines by division\
 \
 \cf2 #%%\
 \
 # Plastic service line count by division, count of lines, average length\
-\cf5 plasticsvcbydivision = pd.read_sql(\cf6 "SELECT divisiondesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ), \cf9 AVG\cf6 (shapelengthvalue) FROM service WHERE materialdesc='Plastic' GROUP BY divisiondesc" \cf4 , \cf5 assets)\
+\cf5 plasticsvcbydivision = pd.read_sql(\cf6 "\cb11 SELECT divisiondesc, COUNT(*), AVG(shapelengthvalue) FROM service WHERE materialdesc='Plastic' GROUP BY divisiondesc\cb3 " \cf4 , \cf5 assets)\
 \
 \cf2 # Calculate service line length in miles per division\
 \cf5 plasticsvclengthbydiv = plasticsvcbydivision[\cf6 'count'\cf5 ]*plasticsvcbydivision[\cf6 'avg'\cf5 ]\
@@ -1446,7 +1434,7 @@ plasticsvcbydivision.index += \cf7 1\
 \cf2 # plasticsvcbydivision = plasticsvcbydivision.rename(index= plasticsvcbydivision["divisiondesc"].str.upper())\
 \
 # plasticdiginbydivision = pd.read_sql("SELECT divisiondesc, COUNT(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic' GROUP BY divisiondesc" , leaks)\
-\cf5 plasticdiginbydivision = pd.read_sql(\cf6 "SELECT divisiondesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY divisiondesc" \cf4 , \cf5 leaks)\
+\cf5 plasticdiginbydivision = pd.read_sql(\cf6 "\cb11 SELECT divisiondesc, COUNT(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic'\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY divisiondesc\cb3 " \cf4 , \cf5 leaks)\
 \cf2 #plasticdiginbydivision = plasticdiginbydivision.rename(index= plasticdiginbydivision["divisiondesc"].str.upper())\
 \
 \cf5 plasticsvcbydivision[\cf6 "Excav. Leaks"\cf5 ] = plasticdiginbydivision[\cf6 "count"\cf5 ]\
@@ -1477,7 +1465,7 @@ plasticsvcbydivisionCompleteTotLength/totserviceutility.loc[\cf6 "Plastic"\cf4 ,
 \cf2 #%%\
 \
 # Steel service line count by division, count of lines, average length\
-\cf5 steelsvcbydivision = pd.read_sql(\cf6 "SELECT divisiondesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ), \cf9 AVG\cf6 (shapelengthvalue) FROM service WHERE materialdesc='Steel' GROUP BY divisiondesc" \cf4 , \cf5 assets)\
+\cf5 steelsvcbydivision = pd.read_sql(\cf6 "\cb11 SELECT divisiondesc, COUNT(*), AVG(shapelengthvalue) FROM service WHERE materialdesc='Steel' GROUP BY divisiondesc\cb3 " \cf4 , \cf5 assets)\
 \
 \cf2 # Calculate service line length in miles per division\
 \cf5 steelsvclengthbydiv = steelsvcbydivision[\cf6 'count'\cf5 ]*steelsvcbydivision[\cf6 'avg'\cf5 ]\
@@ -1485,7 +1473,7 @@ steelsvcbydivision[\cf6 'length'\cf5 ] = steelsvclengthbydiv/feet_per_km\
 steelsvcbydivision.index += \cf7 1\cf2 # = steelsvcbydivision.rename(index= steelsvcbydivision.index + 1)\
 # steelsvcbydivision = steelsvcbydivision.rename(index= steelsvcbydivision["divisiondesc"].str.upper())\
 \
-\cf5 steeldiginbydivision = pd.read_sql(\cf6 "SELECT divisiondesc, \cf9 COUNT\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel'"\cf5 +  assettypecalcAnd + \cf6 " GROUP BY divisiondesc" \cf4 , \cf5 leaks)\
+\cf5 steeldiginbydivision = pd.read_sql(\cf6 "\cb11 SELECT divisiondesc, COUNT(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel'\cb3 "\cf5 +  assettypecalcAnd + \cf6 "\cb11  GROUP BY divisiondesc\cb3 " \cf4 , \cf5 leaks)\
 \cf2 # steeldiginbydivision = steeldiginbydivision.rename(index= steeldiginbydivision["divisiondesc"].str.upper())\
 \
 \cf5 steelsvcbydivision[\cf6 "Excav. Leaks"\cf5 ] = steeldiginbydivision[\cf6 "count"\cf5 ]\
@@ -1526,107 +1514,21 @@ steelsvcbydivisionCompleteTotLength/totserviceutility.loc[\cf6 "Steel"\cf4 , \cf
 \
 #%%\
 \
-# Santa Clara LatLong v. city test\
-\
-\cf5 topLat = \cf6 '37.420663'\
-\cf5 bottomLat = \cf6 '37.322849'\
-\cf5 leftLong = \cf6 '-122.004632'\
-\cf5 rightLong = \cf6 '-121.936654'\
-\
-\cf5 diginLatlongPlasticCountSC = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude, city FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>="\cf5 +bottomLat+\cf6 " AND mappinglatitude<="\cf5 +topLat+\cf6 " AND mappinglongitude>="\cf5 +leftLong+\cf6 " AND mappinglongitude<="\cf5 +rightLong+\cf6 " AND materialcalc='Plastic'" \cf4 , \cf5 leaks)\
-diginLatlongSteelCountSC = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude, city FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>="\cf5 +bottomLat+\cf6 " AND mappinglatitude<="\cf5 +topLat+\cf6 " AND mappinglongitude>="\cf5 +leftLong+\cf6 " AND mappinglongitude<="\cf5 +rightLong+\cf6 " AND materialcalc='Steel'" \cf4 , \cf5 leaks)\
-diginLatlongPlasticCountSC\cf4 , \cf5 diginLatlongSteelCountSC\
-\
-\cf2 #%% Santa Clara city\
-\
-\cf5 diginByCityPlasticSC = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude, city, \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic' AND city='SANTA CLARA'" \cf4 , \cf5 leaks)\
-diginByCitySteelSC = pd.read_sql(\cf6 "SELECT materialcalc, mappinglatitude, mappinglongitude, city, \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel' AND city='SANTA CLARA'" \cf4 , \cf5 leaks)\
-diginByCityPlasticSC\
-\
-\cf2 #%%\
-\
 # Zero latlong values\
-\cf5 diginZeroLatlongPlasticCount = pd.read_sql(\cf6 "SELECT \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude="\cf5 +\cf6 '0'\cf5 +\cf6 "AND mappinglongitude="\cf5 +\cf6 '0'\cf5 +\cf6 " AND materialcalc='Plastic'" \cf4 , \cf5 leaks)\
-diginZeroLatlongSteelCount = pd.read_sql(\cf6 "SELECT \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>="\cf5 +\cf6 '0'\cf5 +\cf6 "AND mappinglongitude="\cf5 +\cf6 '0'\cf5 +\cf6 " AND materialcalc='Steel'" \cf4 , \cf5 leaks)\
-diginTotalPlasticCount = pd.read_sql(\cf6 "SELECT \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic'" \cf4 , \cf5 leaks)\
-diginTotalSteelCount = pd.read_sql(\cf6 "SELECT \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel'" \cf4 , \cf5 leaks)\
+\cf5 diginZeroLatlongPlasticCount = pd.read_sql(\cf6 "\cb11 SELECT count(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude=\cb3 "\cf5 +\cf6 '\cb11 0\cb3 '\cf5 +\cf6 "\cb11 AND mappinglongitude=\cb3 "\cf5 +\cf6 '\cb11 0\cb3 '\cf5 +\cf6 "\cb11  AND materialcalc='Plastic'\cb3 " \cf4 , \cf5 leaks)\
+diginZeroLatlongSteelCount = pd.read_sql(\cf6 "\cb11 SELECT count(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND mappinglatitude>=\cb3 "\cf5 +\cf6 '\cb11 0\cb3 '\cf5 +\cf6 "\cb11 AND mappinglongitude=\cb3 "\cf5 +\cf6 '\cb11 0\cb3 '\cf5 +\cf6 "\cb11  AND materialcalc='Steel'\cb3 " \cf4 , \cf5 leaks)\
+diginTotalPlasticCount = pd.read_sql(\cf6 "\cb11 SELECT count(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic'\cb3 " \cf4 , \cf5 leaks)\
+diginTotalSteelCount = pd.read_sql(\cf6 "\cb11 SELECT count(*) FROM leak WHERE subthreatcalc='ExcavationDamage' AND EXTRACT(YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel'\cb3 " \cf4 , \cf5 leaks)\
 fracMissingLatlongPlastDigin = diginZeroLatlongPlasticCount/diginTotalPlasticCount\
 fracMissingLatlongSteelDigin = diginZeroLatlongSteelCount/diginTotalSteelCount\
 fracMissingLatlongPlastDigin\cf4 , \cf5 fracMissingLatlongSteelDigin\
 \
 \cf2 #%%\
 \
-# Leaks from cities at least partially contained within the box\
-\
-\cf5 citiesInBox = [\cf6 "Campbell"\cf4 , \cf6 "Cupertino"\cf4 , \cf6 "Mountain View"\cf4 , \cf6 "Los Altos"\cf4 , \cf6 "Los Gatos"\cf4 , \cf6 "San Jose"\cf4 , \cf6 "Santa Clara"\cf4 , \cf6 "Saratoga"\cf4 , \cf6 "Sunnyvale"\cf5 ]\
-citiesInBoxUpper = [c.upper() \cf4 for \cf5 c \cf4 in \cf5 citiesInBox]\
-\
-diginByCityPlastic = pd.read_sql(\cf6 "SELECT city, \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Plastic' GROUP BY city" \cf4 , \cf5 leaks)\
-diginByCitySteel = pd.read_sql(\cf6 "SELECT city, \cf9 count\cf6 (\cf9 *\cf6 ) FROM leak WHERE subthreatcalc='ExcavationDamage' AND \cf9 EXTRACT\cf6 (YEAR FROM reporteddatetime) >= 2010 AND materialcalc='Steel' GROUP BY city" \cf4 , \cf5 leaks)\
-diginCityInBoxPlastic = diginByCityPlastic[np.in1d(diginByCityPlastic[\cf6 'city'\cf5 ]\cf4 , \cf5 citiesInBoxUpper)]\
-\cf2 # Add Mountain View in for steel digins (there weren't any during the study period)\
-\cf5 diginByCityInBoxSteel = diginByCitySteel[np.in1d(diginByCitySteel[\cf6 'city'\cf5 ]\cf4 , \cf5 citiesInBoxUpper)]\
-diginByCityInBoxSteel = diginByCityInBoxSteel.append(\{\cf6 'city'\cf5 :\cf6 'MOUNTAIN VIEW'\cf4 , \cf6 'count'\cf5 :\cf7 0\cf5 \}\cf4 , \cf8 ignore_index\cf5 =\cf4 True\cf5 ).sort_values(\cf8 by\cf5 =\cf6 'city'\cf5 )\
-diginCityInBoxPlastic\cf4 , \cf5 diginByCityInBoxSteel\
-\
-\cf2 #%%\
-\
-\
-\
-#%%\
-\
-# Select all plastic and steel service lines within the same box\
-\cf5 pipeByCityPlastic = pd.read_sql(\cf6 "SELECT city, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY city" \cf4 , \cf5 assets)\
-pipeByCitySteel = pd.read_sql(\cf6 "SELECT city, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY city" \cf4 , \cf5 assets)\
-pipeCityInBoxPlastic = pipeByCityPlastic[np.in1d(pipeByCityPlastic[\cf6 'city'\cf5 ]\cf4 , \cf5 citiesInBox)]\
-pipeCityInBoxSteel = pipeByCitySteel[np.in1d(pipeByCitySteel[\cf6 'city'\cf5 ]\cf4 , \cf5 citiesInBox)]\
-pipeCityInBoxPlastic\cf4 , \cf5 pipeCityInBoxSteel\
-\
-\cf2 #%%\
-\
-\cf5 diginCityInBoxPlastic.index = citiesInBoxUpper\
-diginByCityInBoxSteel.index = citiesInBoxUpper\
-pipeCityInBoxPlastic.index = citiesInBoxUpper\
-pipeCityInBoxSteel.index = citiesInBoxUpper\
-\
-diginCityInBoxPlastic[\cf6 'pipe count'\cf5 ] = pipeCityInBoxPlastic[\cf6 'count'\cf5 ]\
-diginCityInBoxPlastic[\cf6 'digins/pipe'\cf5 ] = diginCityInBoxPlastic[\cf6 'count'\cf5 ]/pipeCityInBoxPlastic[\cf6 'count'\cf5 ]\
-diginCityInBoxPlastic\
-\
-\cf2 #%%\
-\
-\cf5 diginByCityInBoxSteel[\cf6 'pipe count'\cf5 ] = pipeCityInBoxSteel[\cf6 'count'\cf5 ]\
-diginByCityInBoxSteel[\cf6 'digins/pipe'\cf5 ] = diginByCityInBoxSteel[\cf6 'count'\cf5 ]/pipeCityInBoxSteel[\cf6 'count'\cf5 ]\
-diginByCityInBoxSteel\
-\
-\cf2 #%%\
-\
-\
-\
-#%%\
-\
-# Convert from latlong to distance\
-# function \{(SIN(PI()*[Lat_start]/180.0)*SIN(PI()*[Lat_end]/180.0)+COS(PI()*[Lat_start]/180.0)*COS(PI()*[Lat_end]/180.0)*COS(PI()*[Long_start]/180.0-PI()*[Long_end]/180.0))*6378\
-\cf5 dist.pairwise\
-\
-\cf2 #%%\
-\
-\cf5 ax = plt.gca()\
-plt.scatter(\cf8 x\cf5 =(diginLatlongPlastic[\cf6 'mappinglongitude'\cf5 ] - \cf10 float\cf5 (leftLong))*LongLength\cf4 , \cf8 y\cf5 =(diginLatlongPlastic[\cf6 'mappinglatitude'\cf5 ] -\cf10 float\cf5 (bottomLat))*LatLength)\
-plt.scatter(\cf8 x\cf5 =(diginLatlongSteel[\cf6 'mappinglongitude'\cf5 ] - \cf10 float\cf5 (leftLong))*LongLength\cf4 , \cf8 y\cf5 =(diginLatlongSteel[\cf6 'mappinglatitude'\cf5 ] -\cf10 float\cf5 (bottomLat))*LatLength)\
-plt.legend([\cf6 'Plastic'\cf4 , \cf6 'Steel'\cf5 ])\
-ax.set_xlabel(\cf6 'West-East distance [km]'\cf5 )\
-ax.set_ylabel(\cf6 'South-North distance [km]'\cf5 )\
-\
-plt.savefig(\cf6 'Spatial leak dist 20210419.png'\cf5 )\
-\
-\
-\cf2 #%%\
-\
 # Asset summary statistics\
 \
-\cf5 pipeDiameterPlst = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
-pipeDiameterSteel = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 pipeDiameterPlst = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, count(*) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
+pipeDiameterSteel = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, count(*) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 pipeDiameterPlst.index = pipeDiameterPlst[\cf6 'nominaldiameter'\cf5 ]\
 pipeDiameterPlst.index.name = \cf4 None\
 \cf5 pipeDiameterSteel.index = pipeDiameterSteel[\cf6 'nominaldiameter'\cf5 ]\
@@ -1637,22 +1539,22 @@ pipeDiameterPlst\
 \cf2 #%%\
 \
 # Steel coating\
-\cf5 coatingSteel0_5 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteel0_5 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteel0_5.index = coatingSteel0_5[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteel0_5.index.name = \cf4 None\
-\cf5 coatingSteel0_75 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteel0_75 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteel0_75.index = coatingSteel0_75[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteel0_75.index.name = \cf4 None\
-\cf5 coatingSteel1 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteel1 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteel1.index = coatingSteel1[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteel1.index.name = \cf4 None\
-\cf5 coatingSteel1_25 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteel1_25 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteel1_25.index = coatingSteel1_25[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteel1_25.index.name = \cf4 None\
-\cf5 coatingSteel2 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteel2 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteel2.index = coatingSteel2[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteel2.index.name = \cf4 None\
-\cf5 coatingSteelAll = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingSteelAll = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Steel' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingSteelAll.index = coatingSteelAll[\cf6 'coatingtypedesc'\cf5 ]\
 coatingSteelAll.index.name = \cf4 None\
 \cf5 coatingSteelAll[\cf6 '0.5'\cf5 ] = coatingSteel0_5[\cf6 'count'\cf5 ]\
@@ -1665,12 +1567,12 @@ coatingSteelAll\
 \cf2 #%%\
 \
 # Plastic coating\
-\cf5 coatingPlastic0_5 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
-coatingPlastic0_75 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
-coatingPlastic1 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
-coatingPlastic1_25 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
-coatingPlastic2 = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
-coatingPlasticAll = pd.read_sql(\cf6 "SELECT coatingtypedesc, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY coatingtypedesc" \cf4 , \cf5 assets)\
+\cf5 coatingPlastic0_5 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
+coatingPlastic0_75 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
+coatingPlastic1 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
+coatingPlastic1_25 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
+coatingPlastic2 = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
+coatingPlasticAll = pd.read_sql(\cf6 "\cb11 SELECT coatingtypedesc, count(*) FROM service WHERE materialdesc='Plastic' GROUP BY coatingtypedesc\cb3 " \cf4 , \cf5 assets)\
 coatingPlasticAll[\cf6 '0.5'\cf5 ] = coatingPlastic0_5[\cf6 'count'\cf5 ]\
 coatingPlasticAll[\cf6 '0.75'\cf5 ] = coatingPlastic0_75[\cf6 'count'\cf5 ]\
 coatingPlasticAll[\cf6 '1'\cf5 ] = coatingPlastic1[\cf6 'count'\cf5 ]\
@@ -1681,12 +1583,12 @@ coatingPlasticAll\
 \cf2 #%%\
 \
 # Steel manufacturer\
-\cf5 mfgSteel0_5 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgSteel0_75 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgSteel1 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgSteel1_25 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgSteel2 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgSteelAll = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY manufacturer" \cf4 , \cf5 assets)\
+\cf5 mfgSteel0_5 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgSteel0_75 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgSteel1 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgSteel1_25 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgSteel2 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgSteelAll = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Steel' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
 mfgSteelAll[\cf6 '0.5'\cf5 ] = mfgSteel0_5[\cf6 'count'\cf5 ]\
 mfgSteelAll[\cf6 '0.75'\cf5 ] = mfgSteel0_75[\cf6 'count'\cf5 ]\
 mfgSteelAll[\cf6 '1'\cf5 ] = mfgSteel1[\cf6 'count'\cf5 ]\
@@ -1697,12 +1599,12 @@ mfgSteelAll\
 \cf2 #%%\
 \
 # Plastic manufacturer\
-\cf5 mfgPlastic0_5 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgPlastic0_75 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgPlastic1 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgPlastic1_25 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgPlastic2 = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgPlasticAll = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY manufacturer" \cf4 , \cf5 assets)\
+\cf5 mfgPlastic0_5 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgPlastic0_75 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgPlastic1 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgPlastic1_25 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgPlastic2 = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgPlasticAll = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM service WHERE materialdesc='Plastic' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
 mfgPlasticAll[\cf6 '0.5'\cf5 ] = mfgPlastic0_5[\cf6 'count'\cf5 ]\
 mfgPlasticAll[\cf6 '0.75'\cf5 ] = mfgPlastic0_75[\cf6 'count'\cf5 ]\
 mfgPlasticAll[\cf6 '1'\cf5 ] = mfgPlastic1[\cf6 'count'\cf5 ]\
@@ -1713,12 +1615,12 @@ mfgPlasticAll\
 \cf2 #%%\
 \
 # Steel pressure\
-\cf5 pressureSteel0_5 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressureSteel0_75 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressureSteel1 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressureSteel1_25 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressureSteel2 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressureSteelAll = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 pressureSteel0_5 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.5' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressureSteel0_75 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='0.75' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressureSteel1 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressureSteel1_25 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='1.25' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressureSteel2 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' AND nominaldiameter='2' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressureSteelAll = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Steel' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 pressureSteelAll[\cf6 '0.5'\cf5 ] = pressureSteel0_5[\cf6 'count'\cf5 ]\
 pressureSteelAll[\cf6 '0.75'\cf5 ] = pressureSteel0_75[\cf6 'count'\cf5 ]\
 pressureSteelAll[\cf6 '1'\cf5 ] = pressureSteel1[\cf6 'count'\cf5 ]\
@@ -1729,12 +1631,12 @@ pressureSteelAll\
 \cf2 #%%\
 \
 # Plastic pressure\
-\cf5 pressurePlastic0_5 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressurePlastic0_75 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressurePlastic1 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressurePlastic1_25 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressurePlastic2 = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-pressurePlasticAll = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 pressurePlastic0_5 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.5' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressurePlastic0_75 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='0.75' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressurePlastic1 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressurePlastic1_25 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='1.25' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressurePlastic2 = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' AND nominaldiameter='2' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+pressurePlasticAll = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM service WHERE materialdesc='Plastic' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 pressurePlasticAll[\cf6 '0.5'\cf5 ] = pressurePlastic0_5[\cf6 'count'\cf5 ]\
 pressurePlasticAll[\cf6 '0.75'\cf5 ] = pressurePlastic0_75[\cf6 'count'\cf5 ]\
 pressurePlasticAll[\cf6 '1'\cf5 ] = pressurePlastic1[\cf6 'count'\cf5 ]\
@@ -1745,8 +1647,8 @@ pressurePlasticAll\
 \cf2 #%%\
 \
 # Installation method\
-\cf5 installMethodSteelAll = pd.read_sql(\cf6 "SELECT installationmethod, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Steel' GROUP BY installationmethod" \cf4 , \cf5 assets)\
-installMethodPlasticAll = pd.read_sql(\cf6 "SELECT installationmethod, \cf9 count\cf6 (\cf9 *\cf6 ) FROM service WHERE materialdesc='Plastic' GROUP BY installationmethod" \cf4 , \cf5 assets)\
+\cf5 installMethodSteelAll = pd.read_sql(\cf6 "\cb11 SELECT installationmethod, count(*) FROM service WHERE materialdesc='Steel' GROUP BY installationmethod\cb3 " \cf4 , \cf5 assets)\
+installMethodPlasticAll = pd.read_sql(\cf6 "\cb11 SELECT installationmethod, count(*) FROM service WHERE materialdesc='Plastic' GROUP BY installationmethod\cb3 " \cf4 , \cf5 assets)\
 installMethodSteelAll.index = installMethodSteelAll[\cf6 'installationmethod'\cf5 ]\
 installMethodSteelAll.index.name = \cf4 None\
 \cf5 installMethodPlasticAll.index = installMethodPlasticAll[\cf6 'installationmethod'\cf5 ]\
@@ -1775,7 +1677,7 @@ installMethodPlasticAll\
 # lengthSteelAll['2 mean'] = lengthSteel2['avg']\
 # lengthSteelAll['2 SD'] = lengthSteel2['stddev']\
 # lengthSteelAll\
-\cf5 lengthSteelAll = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 AVG\cf6 (shapelengthvalue), STDDEV(shapelengthvalue) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 lengthSteelAll = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, AVG(shapelengthvalue), STDDEV(shapelengthvalue) FROM service WHERE materialdesc='Steel' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 lengthSteelAll\
 \
 \cf2 #%%\
@@ -1798,7 +1700,7 @@ lengthSteelAll\
 # lengthPlasticAll['2 mean'] = lengthPlastic2['avg']\
 # lengthPlasticAll['2 SD'] = lengthPlastic2['stddev']\
 # lengthPlasticAll\
-\cf5 lengthPlasticAll = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 AVG\cf6 (shapelengthvalue), STDDEV(shapelengthvalue) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 lengthPlasticAll = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, AVG(shapelengthvalue), STDDEV(shapelengthvalue) FROM service WHERE materialdesc='Plastic' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 lengthPlasticAll\
 \
 \cf2 #%%\
@@ -1821,7 +1723,7 @@ lengthPlasticAll\
 # lengthSteelAll['2 mean'] = lengthSteel2['avg']\
 # lengthSteelAll['2 SD'] = lengthSteel2['stddev']\
 # lengthSteelAll\
-\cf5 installYearSteelAll = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 AVG\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), STDDEV(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM service WHERE materialdesc='Steel' AND \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 installYearSteelAll = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, AVG(EXTRACT(YEAR FROM installedcompletiondate)), STDDEV(EXTRACT(YEAR FROM installedcompletiondate)) FROM service WHERE materialdesc='Steel' AND EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 installYearSteelAll.sort_values(\cf6 'nominaldiameter'\cf5 )\
 \
 \cf2 #%%\
@@ -1843,7 +1745,7 @@ installYearSteelAll.sort_values(\cf6 'nominaldiameter'\cf5 )\
 # lengthPlasticAll['1.25 SD'] = lengthPlastic1_25['stddev']\
 # lengthPlasticAll['2 mean'] = lengthPlastic2['avg']\
 # lengthPlasticAll['2 SD'] = lengthPlastic2['stddev']\
-\cf5 installYearPlasticAll = pd.read_sql(\cf6 "SELECT nominaldiameter, \cf9 AVG\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), STDDEV(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM service WHERE materialdesc='Plastic' AND \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY nominaldiameter" \cf4 , \cf5 assets)\
+\cf5 installYearPlasticAll = pd.read_sql(\cf6 "\cb11 SELECT nominaldiameter, AVG(EXTRACT(YEAR FROM installedcompletiondate)), STDDEV(EXTRACT(YEAR FROM installedcompletiondate)) FROM service WHERE materialdesc='Plastic' AND EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY nominaldiameter\cb3 " \cf4 , \cf5 assets)\
 installYearPlasticAll.sort_values(\cf6 'nominaldiameter'\cf5 )\
 \
 \cf2 #%%\
@@ -1853,17 +1755,17 @@ installYearPlasticAll.sort_values(\cf6 'nominaldiameter'\cf5 )\
 #%%\
 \
 # Pressure classification\
-\cf5 pressureClassification = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 pressureClassification = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM regulators GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 pressureClassification\
 \
 \cf2 #%%\
 \
 # Number of regulators\
-\cf5 regulatorCountLP = pd.read_sql(\cf6 "SELECT numberofregs, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE pressureclassification = 'LP' GROUP BY numberofregs" \cf4 , \cf5 assets)\
-regulatorCountHP = pd.read_sql(\cf6 "SELECT numberofregs, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE pressureclassification = 'HP' GROUP BY numberofregs" \cf4 , \cf5 assets)\
-regulatorCountSHP = pd.read_sql(\cf6 "SELECT numberofregs, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE pressureclassification = 'SHP' GROUP BY numberofregs" \cf4 , \cf5 assets)\
-regulatorCountTR = pd.read_sql(\cf6 "SELECT numberofregs, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE pressureclassification = 'TR' GROUP BY numberofregs" \cf4 , \cf5 assets)\
-regulatorCountAll = pd.read_sql(\cf6 "SELECT numberofregs, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators GROUP BY numberofregs" \cf4 , \cf5 assets)\
+\cf5 regulatorCountLP = pd.read_sql(\cf6 "\cb11 SELECT numberofregs, count(*) FROM regulators WHERE pressureclassification = 'LP' GROUP BY numberofregs\cb3 " \cf4 , \cf5 assets)\
+regulatorCountHP = pd.read_sql(\cf6 "\cb11 SELECT numberofregs, count(*) FROM regulators WHERE pressureclassification = 'HP' GROUP BY numberofregs\cb3 " \cf4 , \cf5 assets)\
+regulatorCountSHP = pd.read_sql(\cf6 "\cb11 SELECT numberofregs, count(*) FROM regulators WHERE pressureclassification = 'SHP' GROUP BY numberofregs\cb3 " \cf4 , \cf5 assets)\
+regulatorCountTR = pd.read_sql(\cf6 "\cb11 SELECT numberofregs, count(*) FROM regulators WHERE pressureclassification = 'TR' GROUP BY numberofregs\cb3 " \cf4 , \cf5 assets)\
+regulatorCountAll = pd.read_sql(\cf6 "\cb11 SELECT numberofregs, count(*) FROM regulators GROUP BY numberofregs\cb3 " \cf4 , \cf5 assets)\
 regulatorCountAll.sort_values(\cf8 by\cf5 =\cf6 'numberofregs'\cf5 )\
 \
 \cf2 #%%\
@@ -1874,33 +1776,33 @@ regulatorCountAll.sort_values(\cf8 by\cf5 =\cf6 'numberofregs'\cf5 )\
 # inletMAOPHP = pd.read_sql("SELECT inletmaop, count(*) FROM regulators WHERE pressureclassification = 'HP' GROUP BY inletmaop" , assets)\
 # inletMAOPSHP = pd.read_sql("SELECT inletmaop, count(*) FROM regulators WHERE pressureclassification = 'SHP' GROUP BY inletmaop" , assets)\
 # inletMAOPTR = pd.read_sql("SELECT inletmaop, count(*) FROM regulators WHERE pressureclassification = 'TR' GROUP BY inletmaop" , assets)\
-\cf5 inletMAOPAll = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 avg\cf6 (inletmaop), stddev(inletmaop) FROM regulators GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 inletMAOPAll = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, avg(inletmaop), stddev(inletmaop) FROM regulators GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 inletMAOPAll\
 \
 \cf2 #%%\
 \
 # Outlet MAOP\
-\cf5 outletMAOPAll = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 avg\cf6 (outletmaop), stddev(outletmaop) FROM regulators GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 outletMAOPAll = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, avg(outletmaop), stddev(outletmaop) FROM regulators GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 outletMAOPAll\
 \
 \cf2 #%%\
 \
 # Above ground\
-\cf5 aboveGround = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE abovegroundindicator='Y' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
-belowGround = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators WHERE abovegroundindicator='N' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 aboveGround = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM regulators WHERE abovegroundindicator='Y' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
+belowGround = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, count(*) FROM regulators WHERE abovegroundindicator='N' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 aboveGround[\cf6 'Below ground'\cf5 ] = belowGround[\cf6 'count'\cf5 ]\
 aboveGround\
 \
 \cf2 #%%\
 \
 # Number of stepdowns\
-\cf5 stepdownCount = pd.read_sql(\cf6 "SELECT numberofstepdowns, \cf9 count\cf6 (\cf9 *\cf6 ) FROM regulators GROUP BY numberofstepdowns" \cf4 , \cf5 assets)\
+\cf5 stepdownCount = pd.read_sql(\cf6 "\cb11 SELECT numberofstepdowns, count(*) FROM regulators GROUP BY numberofstepdowns\cb3 " \cf4 , \cf5 assets)\
 stepdownCount.sort_values(\cf8 by\cf5 =\cf6 'numberofstepdowns'\cf5 )\
 \
 \cf2 #%%\
 \
 # Install year (for regulators constructed after 1900)\
-\cf5 installYrReg = pd.read_sql(\cf6 "SELECT pressureclassification, \cf9 avg\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), stddev(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM regulators WHERE \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY pressureclassification" \cf4 , \cf5 assets)\
+\cf5 installYrReg = pd.read_sql(\cf6 "\cb11 SELECT pressureclassification, avg(EXTRACT(YEAR FROM installedcompletiondate)), stddev(EXTRACT(YEAR FROM installedcompletiondate)) FROM regulators WHERE EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY pressureclassification\cb3 " \cf4 , \cf5 assets)\
 installYrReg\
 \
 \cf2 #%%\
@@ -1910,19 +1812,19 @@ installYrReg\
 #%%\
 \
 # Material\
-\cf5 materialNCFitting = pd.read_sql(\cf6 "SELECT material, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 materialNCFitting = pd.read_sql(\cf6 "\cb11 SELECT material, count(*) FROM noncontrollablefitting GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 materialNCFitting\
 \
 \cf2 #%%\
 \
 # Diameter 1\
-\cf5 diam1NCFittingPlastic = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting WHERE material='PL' GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1NCFittingPlastic = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM noncontrollablefitting WHERE material='PL' GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1NCFittingPlastic.index = diam1NCFittingPlastic[\cf6 'diameter1'\cf5 ]\
 diam1NCFittingPlastic.index.name = \cf4 None\
-\cf5 diam1NCFittingSteel = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting WHERE material='ST' GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1NCFittingSteel = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM noncontrollablefitting WHERE material='ST' GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1NCFittingSteel.index = diam1NCFittingSteel[\cf6 'diameter1'\cf5 ]\
 diam1NCFittingSteel.index.name = \cf4 None\
-\cf5 diam1NCFittingAll = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1NCFittingAll = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM noncontrollablefitting GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1NCFittingAll.index = diam1NCFittingAll[\cf6 'diameter1'\cf5 ]\
 diam1NCFittingAll.index.name = \cf4 None\
 \cf5 diam1NCFittingAll[\cf6 'Plastic'\cf5 ] = diam1NCFittingPlastic[\cf6 'count'\cf5 ]\
@@ -1932,13 +1834,13 @@ diam1NCFittingAll\
 \cf2 #%%\
 \
 # Joint type\
-\cf5 jointTypeNCFittingPlastic = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting WHERE material='PL' GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeNCFittingPlastic = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM noncontrollablefitting WHERE material='PL' GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeNCFittingPlastic.index = jointTypeNCFittingPlastic[\cf6 'jointtype'\cf5 ]\
 jointTypeNCFittingPlastic.index.name = \cf4 None\
-\cf5 jointTypeNCFittingSteel = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting WHERE material='ST' GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeNCFittingSteel = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM noncontrollablefitting WHERE material='ST' GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeNCFittingSteel.index = jointTypeNCFittingSteel[\cf6 'jointtype'\cf5 ]\
 jointTypeNCFittingSteel.index.name = \cf4 None\
-\cf5 jointTypeNCFittingAll = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM noncontrollablefitting GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeNCFittingAll = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM noncontrollablefitting GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeNCFittingAll.index = jointTypeNCFittingAll[\cf6 'jointtype'\cf5 ]\
 jointTypeNCFittingAll.index.name = \cf4 None\
 \cf5 jointTypeNCFittingAll[\cf6 'Plastic'\cf5 ] = jointTypeNCFittingPlastic[\cf6 'count'\cf5 ]\
@@ -1949,13 +1851,13 @@ jointTypeNCFittingAll\
 \cf2 #%%\
 \
 # Install year (for regulators constructed after 1900)\
-\cf5 installYrNCF = pd.read_sql(\cf6 "SELECT material, \cf9 avg\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), stddev(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM noncontrollablefitting WHERE \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 installYrNCF = pd.read_sql(\cf6 "\cb11 SELECT material, avg(EXTRACT(YEAR FROM installedcompletiondate)), stddev(EXTRACT(YEAR FROM installedcompletiondate)) FROM noncontrollablefitting WHERE EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 installYrNCF\
 \
 \cf2 #%%\
 \
 # Symbol rotation\
-\cf5 symbolRotationNCF = pd.read_sql(\cf6 "SELECT material, \cf9 avg\cf6 (symbolrotation), stddev(symbolrotation) FROM noncontrollablefitting GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 symbolRotationNCF = pd.read_sql(\cf6 "\cb11 SELECT material, avg(symbolrotation), stddev(symbolrotation) FROM noncontrollablefitting GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 symbolRotationNCF\
 \
 \cf2 #%%\
@@ -1965,19 +1867,19 @@ symbolRotationNCF\
 #%%\
 \
 # Material\
-\cf5 materialCFitting = pd.read_sql(\cf6 "SELECT material, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 materialCFitting = pd.read_sql(\cf6 "\cb11 SELECT material, count(*) FROM controllablefitting GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 materialCFitting\
 \
 \cf2 #%%\
 \
 # Diameter 1\
-\cf5 diam1CFittingPlastic = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting WHERE material='PL' GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1CFittingPlastic = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM controllablefitting WHERE material='PL' GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1CFittingPlastic.index = diam1CFittingPlastic[\cf6 'diameter1'\cf5 ]\
 diam1CFittingPlastic.index.name = \cf4 None\
-\cf5 diam1CFittingSteel = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting WHERE material='ST' GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1CFittingSteel = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM controllablefitting WHERE material='ST' GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1CFittingSteel.index = diam1CFittingSteel[\cf6 'diameter1'\cf5 ]\
 diam1CFittingSteel.index.name = \cf4 None\
-\cf5 diam1CFittingAll = pd.read_sql(\cf6 "SELECT diameter1, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting GROUP BY diameter1" \cf4 , \cf5 assets)\
+\cf5 diam1CFittingAll = pd.read_sql(\cf6 "\cb11 SELECT diameter1, count(*) FROM controllablefitting GROUP BY diameter1\cb3 " \cf4 , \cf5 assets)\
 diam1CFittingAll.index = diam1CFittingAll[\cf6 'diameter1'\cf5 ]\
 diam1CFittingAll.index.name = \cf4 None\
 \cf5 diam1CFittingAll[\cf6 'Plastic'\cf5 ] = diam1CFittingPlastic[\cf6 'count'\cf5 ]\
@@ -1987,13 +1889,13 @@ diam1CFittingAll\
 \cf2 #%%\
 \
 # Joint type\
-\cf5 jointTypeCFittingPlastic = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting WHERE material='PL' GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeCFittingPlastic = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM controllablefitting WHERE material='PL' GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeCFittingPlastic.index = jointTypeCFittingPlastic[\cf6 'jointtype'\cf5 ]\
 jointTypeCFittingPlastic.index.name = \cf4 None\
-\cf5 jointTypeCFittingSteel = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting WHERE material='ST' GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeCFittingSteel = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM controllablefitting WHERE material='ST' GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeCFittingSteel.index = jointTypeCFittingSteel[\cf6 'jointtype'\cf5 ]\
 jointTypeCFittingSteel.index.name = \cf4 None\
-\cf5 jointTypeCFittingAll = pd.read_sql(\cf6 "SELECT jointtype, \cf9 count\cf6 (\cf9 *\cf6 ) FROM controllablefitting GROUP BY jointtype" \cf4 , \cf5 assets)\
+\cf5 jointTypeCFittingAll = pd.read_sql(\cf6 "\cb11 SELECT jointtype, count(*) FROM controllablefitting GROUP BY jointtype\cb3 " \cf4 , \cf5 assets)\
 jointTypeCFittingAll.index = jointTypeCFittingAll[\cf6 'jointtype'\cf5 ]\
 jointTypeCFittingAll.index.name = \cf4 None\
 \cf5 jointTypeCFittingAll[\cf6 'Plastic'\cf5 ] = jointTypeCFittingPlastic[\cf6 'count'\cf5 ]\
@@ -2004,13 +1906,13 @@ jointTypeCFittingAll\
 \cf2 #%%\
 \
 # Install year (for regulators constructed after 1900)\
-\cf5 installYrCF = pd.read_sql(\cf6 "SELECT material, \cf9 avg\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), stddev(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM controllablefitting WHERE \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 installYrCF = pd.read_sql(\cf6 "\cb11 SELECT material, avg(EXTRACT(YEAR FROM installedcompletiondate)), stddev(EXTRACT(YEAR FROM installedcompletiondate)) FROM controllablefitting WHERE EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 installYrCF\
 \
 \cf2 #%%\
 \
 # Symbol rotation\
-\cf5 symbolRotationCF = pd.read_sql(\cf6 "SELECT material, \cf9 avg\cf6 (symbolrotation), stddev(symbolrotation) FROM controllablefitting GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 symbolRotationCF = pd.read_sql(\cf6 "\cb11 SELECT material, avg(symbolrotation), stddev(symbolrotation) FROM controllablefitting GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 symbolRotationCF\
 \
 \cf2 #%%\
@@ -2020,16 +1922,16 @@ symbolRotationCF\
 #%%\
 \
 # Material\
-\cf5 materialXFV = pd.read_sql(\cf6 "SELECT material, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 materialXFV = pd.read_sql(\cf6 "\cb11 SELECT material, count(*) FROM excessflowvalve GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 materialXFV\
 \
 \
 \cf2 #%%\
 \
 # Manufacturer\
-\cf5 mfgXFVPlastic = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve WHERE material='PL' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgXFVSteel = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve WHERE material='ST' GROUP BY manufacturer" \cf4 , \cf5 assets)\
-mfgXFVAll = pd.read_sql(\cf6 "SELECT manufacturer, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve GROUP BY manufacturer" \cf4 , \cf5 assets)\
+\cf5 mfgXFVPlastic = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM excessflowvalve WHERE material='PL' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgXFVSteel = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM excessflowvalve WHERE material='ST' GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
+mfgXFVAll = pd.read_sql(\cf6 "\cb11 SELECT manufacturer, count(*) FROM excessflowvalve GROUP BY manufacturer\cb3 " \cf4 , \cf5 assets)\
 mfgXFVAll[\cf6 'Plastic'\cf5 ] = mfgXFVPlastic[\cf6 'count'\cf5 ]\
 mfgXFVAll[\cf6 'Steel'\cf5 ] = mfgXFVSteel[\cf6 'count'\cf5 ]\
 mfgXFVAll\
@@ -2037,13 +1939,13 @@ mfgXFVAll\
 \cf2 #%%\
 \
 # Valve size\
-\cf5 valvesizeXFVPlastic = pd.read_sql(\cf6 "SELECT valvesize, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve WHERE material='PL' GROUP BY valvesize" \cf4 , \cf5 assets)\
+\cf5 valvesizeXFVPlastic = pd.read_sql(\cf6 "\cb11 SELECT valvesize, count(*) FROM excessflowvalve WHERE material='PL' GROUP BY valvesize\cb3 " \cf4 , \cf5 assets)\
 valvesizeXFVPlastic.index = valvesizeXFVPlastic[\cf6 'valvesize'\cf5 ]\
 valvesizeXFVPlastic.index.name = \cf4 None\
-\cf5 valvesizeXFVSteel = pd.read_sql(\cf6 "SELECT valvesize, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve WHERE material='ST' GROUP BY valvesize" \cf4 , \cf5 assets)\
+\cf5 valvesizeXFVSteel = pd.read_sql(\cf6 "\cb11 SELECT valvesize, count(*) FROM excessflowvalve WHERE material='ST' GROUP BY valvesize\cb3 " \cf4 , \cf5 assets)\
 valvesizeXFVSteel.index = valvesizeXFVSteel[\cf6 'valvesize'\cf5 ]\
 valvesizeXFVSteel.index.name = \cf4 None\
-\cf5 valvesizeXFVAll = pd.read_sql(\cf6 "SELECT valvesize, \cf9 count\cf6 (\cf9 *\cf6 ) FROM excessflowvalve GROUP BY valvesize" \cf4 , \cf5 assets)\
+\cf5 valvesizeXFVAll = pd.read_sql(\cf6 "\cb11 SELECT valvesize, count(*) FROM excessflowvalve GROUP BY valvesize\cb3 " \cf4 , \cf5 assets)\
 valvesizeXFVAll.index = valvesizeXFVAll[\cf6 'valvesize'\cf5 ]\
 valvesizeXFVAll.index.name = \cf4 None\
 \cf5 valvesizeXFVAll[\cf6 'Plastic'\cf5 ] = valvesizeXFVPlastic[\cf6 'count'\cf5 ]\
@@ -2054,16 +1956,17 @@ valvesizeXFVAll\
 \
 # Install year\
 # Install year (for regulators constructed after 1900)\
-\cf5 installYrXFV = pd.read_sql(\cf6 "SELECT material, \cf9 avg\cf6 (\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)), stddev(\cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate)) FROM excessflowvalve WHERE \cf9 EXTRACT\cf6 (YEAR FROM installedcompletiondate) > '1900' GROUP BY material" \cf4 , \cf5 assets)\
+\cf5 installYrXFV = pd.read_sql(\cf6 "\cb11 SELECT material, avg(EXTRACT(YEAR FROM installedcompletiondate)), stddev(EXTRACT(YEAR FROM installedcompletiondate)) FROM excessflowvalve WHERE EXTRACT(YEAR FROM installedcompletiondate) > '1900' GROUP BY material\cb3 " \cf4 , \cf5 assets)\
 installYrXFV\
 \
 \cf2 #%%\
 \
 # List tables\
 \cf5 cursor = assets.cursor()\
-cursor.execute(\cf6 """SELECT table_name FROM information_schema.tables\
-       WHERE table_schema = 'public'"""\cf5 )\
+cursor.execute(\cf6 """\cb11 SELECT table_name FROM information_schema.tables\
+       WHERE table_schema = 'public'\cb3 """\cf5 )\
 \cf4 for \cf5 table \cf4 in \cf5 cursor.fetchall():\
     \cf10 print\cf5 (table)\
+\
 \
 }
